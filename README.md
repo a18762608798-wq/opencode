@@ -15,7 +15,7 @@
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
 | `launch-mode/` | 启动方式插件，当前 `mode: desktop` |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
-| `web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
+| `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
 
 主配置要点（见 `opencode.jsonc`）：默认 Agent 为 `commander`，默认模型 `opencode-go/muse-spark-1.3-contributor#xhigh`；provider 白名单放行 `opencode-go` + `vankit-0.06` / `vankit-0.15` / `vankit-0.25` / `vankit-0.55`；MCP 为 `playwright`、`zotero`（本地 `zotero-mcp`），`context7` 由 `@upstash/context7-opencode` 插件托管。
 
@@ -30,7 +30,7 @@
 
 `sdd/` 是规范驱动开发（Spec-Driven Development, SDD）的文档集，包含三个子目录：
 
-1. **`sdd/change-oriented-computing/`** — 底层计算哲学：面向变更的计算（Change-Oriented Computing, COC）理论总纲，演化流程为一等对象链路：`State -> Change -> Artifact Graph -> Approval -> Actions -> Evidence -> State'`。
+1. **`sdd/change-oriented-computing/`** — 底层计算哲学：面向变更的计算（Change-Oriented Computing, COC）理论总纲（`README.md`），演化流程为一等对象链路：`State -> Change -> Artifact Graph -> Approval -> Actions -> Evidence -> State'`；配套 `cognitive-loop.md`（人机认知协作闭环）：区分「结果可信度」与「个人理解深度 L1–L3」，以**选择性理解**（重要性/脆弱性/延展性）代替平均分配注意力，形成「AI 扩展探索范围 -> 人类理解整体结构 -> 选择性深入重建 -> 提出更好的问题」的认知正反馈循环。
 2. **`sdd/openspec/`** — OpenSpec CLI 的安装、配置与轻量工作流文档（`install.md`、`config.md`、`usage.md`）。
 3. **`sdd/specify/`（核心）** — GitHub Spec Kit（`specify-cli`）全套文档与自定义预设（Presets）：
    - 基础文档：`install.md`、`config.md`、`usage/default.md`（标准 9 步流程：`constitution -> specify -> clarify -> plan -> checklist -> tasks -> analyze -> implement -> converge`）、`usage/self-define/README.md`（Preset/Template/Command 定制指南）、`GOAL_DRIVEN_LOOP_PLAN.md`（目标驱动闭环规划）。

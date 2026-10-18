@@ -27,7 +27,7 @@
 
 ## SDD 与 GitHub Spec Kit 目录 (`sdd/`)
 
-`~/.config/opencode/sdd/` 存放规范驱动开发（Spec-Driven Development, SDD）文档：`change-oriented-computing/`（COC 理论总纲）、`openspec/`（OpenSpec CLI 文档）和 `specify/`（GitHub Spec Kit）。
+`~/.config/opencode/sdd/` 存放规范驱动开发（Spec-Driven Development, SDD）文档：`change-oriented-computing/`（COC 理论总纲 `README.md` 与人机认知协作闭环 `cognitive-loop.md`）、`openspec/`（OpenSpec CLI 文档）和 `specify/`（GitHub Spec Kit）。
 
 * `sdd/specify/` 是本地 GitHub Spec Kit 工作流文档与自定义 Preset 的权威源（Canonical Source），配合全局 `agents/speckit-guide.md` 与 `plugins/speckit-rework-gate.ts` 使用。
 * 关键构成：
