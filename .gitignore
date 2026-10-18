@@ -1,0 +1,35 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Local secrets: background-service auth + env, must not be committed
+service.json
+
+# Session files
+session-*.md
