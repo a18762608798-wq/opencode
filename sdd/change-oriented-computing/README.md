@@ -52,4 +52,4 @@ State₀ ──────────────► Change
 
 ## 延伸：人机认知协作闭环
 
-见 [cognitive-loop.md](./cognitive-loop.md)。COC 管**外部状态演化闭环**（变更如何被验证地推进），认知协作闭环管**研究者内部认知正反馈**（AI 扩展探索范围、人通过选择性理解关键思想而成长），两环相扣才是完整的人机协作。
+见 [cognitive-loop.md](./cognitive-loop.md)。COC 管**外部状态演化闭环**（变更如何被验证地推进），认知协作闭环管**研究者内部认知正反馈**（AI 扩展探索范围、人通过选择性理解关键思想而成长），两环相扣才是完整的人机协作。认知闭环在 `knowledge/`（`CON-/PRF-/RES-`）知识库中的落地映射（`VERIFY` 数值验证 + `note/VER-*/`、`[AI]` 理解标记等）见 [cognitive-loop.md](./cognitive-loop.md) 的「落地映射」一节。
