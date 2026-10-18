@@ -308,12 +308,6 @@
         }
     },
     "plugins": [
-        "@upstash/context7-opencode",
-        {
-            "package": "/home/mintusr/.config/opencode/launch-mode",
-            "options": {
-                "mode": "desktop"
-            }
-        }
+        "@upstash/context7-opencode"
     ]
 }

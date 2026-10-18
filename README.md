@@ -13,7 +13,6 @@
 | `agents/` | 7 个 Agent：主控 `commander` + 5 个专职子 Agent（`explorer`/`researcher`/`integrator`/`implementer`/`reviewer`）+ `speckit-guide` |
 | `plugins/` | 2 个本地插件：`commander-model-guard.ts`（`gemini-4-argon-contributor` 仅限 `commander` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁） |
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
-| `launch-mode/` | 启动方式插件，当前 `mode: desktop` |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
 | `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
 
