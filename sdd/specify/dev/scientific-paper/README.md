@@ -65,7 +65,7 @@ julia --project=. --startup-file=no \
 
 ```bash
 specify init --here --integration opencode # 初始化
-specify preset add --dev ~/sync/computer/code/agent/specify/dev/scientific-paper --priority 4
+specify preset add --dev ~/.config/opencode/sdd/specify/dev/scientific-paper --priority 4
 specify preset resolve spec-template
 ```
 
@@ -74,7 +74,7 @@ specify preset resolve spec-template
 改完源目录后重装：
 
 ```bash
-specify preset update scientific-paper --dev ~/sync/computer/code/agent/specify/dev/scientific-paper --priority 4
+specify preset update scientific-paper --dev ~/.config/opencode/sdd/specify/dev/scientific-paper --priority 4
 specify integration upgrade opencode --force --script sh
 ```
 

@@ -44,12 +44,20 @@ Ref to [instructions](https://opencode.ai/v2/docs/instructions)
 
 ```text
 ~/.config/opencode/
-├── opencode.jsonc       # 全局运行配置（模型、权限、MCP、Agent…）
+├── opencode.jsonc       # 全局运行配置（模型、权限、MCP、插件…）
 ├── AGENTS.md            # 全局自然语言规则
-├── agents/
-│   └── speckit-guide.md # 自定义 Agent
-└── skills/
-    └── <skill-name>/  # 自定义 skill（SKILL.md + supporting files）
+├── agents/              # 自定义 Agent（本仓库 7 个）
+│   ├── commander.md     # 主控 Agent（默认）
+│   ├── explorer.md / researcher.md / integrator.md / implementer.md / reviewer.md
+│   │                    # 5 个专职子 Agent
+│   └── speckit-guide.md # Spec Kit 流程 Agent
+├── plugins/             # 本地插件
+│   ├── commander-model-guard.ts   # gemini-4-argon-contributor 仅限 commander
+│   └── speckit-rework-gate.ts     # Spec Kit 返工门禁
+├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 12 个）
+├── sdd/                 # 规范驱动开发文档（COC / OpenSpec / GitHub Spec Kit）
+├── launch-mode/         # 启动方式插件
+└── docs/                # 本地手册
 ```
 
 在项目中使用：

@@ -9,6 +9,22 @@ Agent 是 OpenCode 中最核心的概念。一个 Agent 定义了：
 - 🛠️ **可用工具**：AI 可以使用的技能（Skills）和 MCP 工具
 - 📝 **系统提示词**：定制化的初始指令
 
+## 本仓库当前启用的 Agent（真实配置）
+
+全局配置 `~/.config/opencode`（本仓库）当前实际采用 **Commander + 5 专职 Subagent + `speckit-guide`** 架构：
+
+| Agent | `mode` | 职责 |
+| ----- | ------ | ---- |
+| `commander` | `primary`（默认主控） | 理解需求、制定计划、调度 5 个核心子 Agent、关键决策与最终验收 |
+| `explorer` | `subagent` | 本地代码库探索与架构定位（只读） |
+| `researcher` | `subagent` | 外部技术文档与学术文献检索（只读） |
+| `integrator` | `subagent` | 外部系统写入与浏览器自动化（带副作用的 MCP 操作） |
+| `implementer` | `subagent` | 代码实现、构建测试与终端排障 |
+| `reviewer` | `subagent` | 独立代码审查与质量把关（只读） |
+| `speckit-guide` | `all` | GitHub Spec Kit 流程引导 |
+
+> 下文 Build / Plan 等为 OpenCode 内置 Agent 的通用说明；本仓库已在 `opencode.jsonc` 中禁用 `general` / `explore`。下文自定义 Agent 的示例文件均为**通用语法教学示例**，不代表本仓库现存文件。
+
 ## 内置 Agent
 
 OpenCode 自带几个预设 Agent：
@@ -32,6 +48,8 @@ Agent: Plan
 ```
 
 ## 创建自定义 Agent
+
+（本节为通用语法示例，实际文件名与职责按项目需要决定。）
 
 创建 `.opencode/agents/code-reviewer.md`：(推荐)
 

@@ -2,6 +2,8 @@
 
 单个 Agent 可以完成多数任务，但复杂项目可以使用多个专业 Agent 分工。
 
+> **本仓库实际架构**：全局配置 `~/.config/opencode` 当前采用 **Commander + 5 专职 Subagent（`explorer`、`researcher`、`integrator`、`implementer`、`reviewer`）+ `speckit-guide`** 架构（详见 [Agent 系统](01-agents.md) 与 `~/.config/opencode/agents/`）。下文的 `tech-lead` / `frontend-specialist` 等示例均为**通用语法教学**，用于说明 primary / subagent 的组织方式，不代表本仓库现存文件。
+
 OpenCode 的 Agent 分为两类：
 
 * **Primary Agent**：用户主要交互的 Agent，可以分析需求、修改代码并调用 Subagent。
@@ -225,6 +227,8 @@ Subagent 会在独立子会话中运行，避免将大量中间过程全部放�
 4. Subagent 在独立子会话中完成工作并返回结果。
 5. Primary Agent 检查和整合结果。
 6. Primary Agent 向用户汇报最终结果。
+
+本仓库中该流程对应为：用户向 `commander` 提出需求，由 `commander` 调度 `explorer` / `researcher` / `integrator` / `implementer` / `reviewer` 分工执行（只读探索与审查、检索、外部写入、实现测试各司其职），Spec Kit 相关流程由 `speckit-guide` 辅助。
 
 ---
 
