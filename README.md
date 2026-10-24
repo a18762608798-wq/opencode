@@ -11,9 +11,8 @@
 | `cli.json` / `service.json` | TUI 显示配置 / `serve` 服务配置 |
 | `skills/` | 自动加载，共 10 个 skill |
 | `agents/` | 5 个 Agent：包工头主控 `manager` + 3 个异构子 Agent（`coder`/`env-ops`/`reviewer`）+ `speckit-guide` |
-| `plugins/` | 2 个本地插件：`manager-gemini-guard.ts`（Gemini 4 系模型仅限 `manager` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁，含 `scope` 硬约束与 `close`） |
+| `plugins/` | 3 个本地插件：`manager-gemini-guard.ts`（Gemini 4 系模型仅限 `manager` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁，含 `scope` 硬约束与 `close`）、`formula-style.ts`（LaTeX `$` / `$$` 公式格式注入） |
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
-| `formula-style/` | 公式格式注入插件（LaTeX `$` / `$$` 规范） |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
 | `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
 

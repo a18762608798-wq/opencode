@@ -51,12 +51,12 @@ Ref to [instructions](https://opencode.ai/v2/docs/instructions)
 │   ├── coder.md / env-ops.md / reviewer.md
 │   │                    # 3 个异构子 Agent：编码 / 环境终端 / 只读预审
 │   └── speckit-guide.md # Spec Kit 流程 Agent
-├── plugins/             # 本地插件
+├── plugins/             # 本地插件（单文件自动发现）
+│   ├── formula-style.ts          # 公式格式注入（LaTeX $ 规范）
 │   ├── manager-gemini-guard.ts   # Gemini 4 系模型仅限 manager 使用
-│   └── speckit-rework-gate.ts     # Spec Kit 返工门禁（含 scope 硬约束与 close）
+│   └── speckit-rework-gate.ts    # Spec Kit 返工门禁（含 scope 硬约束与 close）
 ├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 10 个）
 ├── sdd/                 # 规范驱动开发文档（COC / OpenSpec / GitHub Spec Kit）
-├── formula-style/        # 公式格式注入插件（LaTeX $ 规范）
 └── docs/                # 本地手册（含 web/ 手机浏览器访问指南）
 ```
 
