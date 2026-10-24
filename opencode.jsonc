@@ -322,10 +322,7 @@
     "plugins": [
         "@upstash/context7-opencode",
         {
-            "package": "/home/mintusr/.config/opencode/launch-mode",
-            "options": {
-                "mode": "desktop"
-            }
+            "package": "/home/mintusr/.config/opencode/launch-mode"
         }
     ]
 }
