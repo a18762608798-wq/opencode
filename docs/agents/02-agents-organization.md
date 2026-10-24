@@ -2,7 +2,7 @@
 
 单个 Agent 可以完成多数任务，但复杂项目可以使用多个专业 Agent 分工。
 
-> **本仓库实际架构**：全局配置 `~/.config/opencode` 当前采用 **Commander + 5 专职 Subagent（`explorer`、`researcher`、`integrator`、`implementer`、`reviewer`）+ `speckit-guide`** 架构（详见 [Agent 系统](01-agents.md) 与 `~/.config/opencode/agents/`）。下文的 `tech-lead` / `frontend-specialist` 等示例均为**通用语法教学**，用于说明 primary / subagent 的组织方式，不代表本仓库现存文件。
+> **本仓库实际架构**：全局配置 `~/.config/opencode` 当前采用 **Manager 包工头小队（`manager`、`coder`、`env-ops`、`reviewer`）+ `speckit-guide`** 架构（详见 [Agent 系统](01-agents.md) 与 `~/.config/opencode/agents/`）。下文的 `tech-lead` / `frontend-specialist` 等示例均为**通用语法教学**，用于说明 primary / subagent 的组织方式，不代表本仓库现存文件。
 
 OpenCode 的 Agent 分为两类：
 
@@ -228,7 +228,7 @@ Subagent 会在独立子会话中运行，避免将大量中间过程全部放�
 5. Primary Agent 检查和整合结果。
 6. Primary Agent 向用户汇报最终结果。
 
-本仓库中该流程对应为：用户向 `commander` 提出需求，由 `commander` 调度 `explorer` / `researcher` / `integrator` / `implementer` / `reviewer` 分工执行（只读探索与审查、检索、外部写入、实现测试各司其职），Spec Kit 相关流程由 `speckit-guide` 辅助。
+本仓库中该流程对应为：用户向主会话提出需求，主会话直接处理或切到 `manager` 主控；由 `manager` 按偏科派单（环境→`env-ops`，编码→`coder`），完成后必经 `reviewer` 预审（PASS/FAIL），`manager` 只做 YES/NO 拍板，Spec Kit 相关流程由 `speckit-guide` 辅助。
 
 ---
 

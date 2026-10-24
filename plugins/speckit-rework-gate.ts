@@ -25,6 +25,7 @@ type Phase =
   | "tasks-pending"
   | "checklists-pending"
   | "implementation-open"
+  | "closed"
   | "blocked"
 
 interface Txn {
@@ -32,6 +33,7 @@ interface Txn {
   featureDir: string // 相对项目根，如 specs/001-foo
   phase: Phase
   affectedStages: Stage[]
+  scope: string[] // 评估时申报的可写文件 glob（仓库相对），实现阶段硬约束
   snapshots: Record<string, string> // relpath -> sha256，门之间做 hash 对比
   summaries: Partial<Record<Stage | "impact", string>>
   blockReason?: string
@@ -379,6 +381,75 @@ function shellLooksLikeWrite(command: string): boolean {
   }
 }
 
+// scope glob 匹配：支持 **、*、?，仓库相对路径，统一用 posix 分隔符。
+function scopeMatch(glob: string, relPosix: string): boolean {
+  const g = glob.replace(/\\/g, "/").replace(/^\.\//, "")
+  const p = relPosix.replace(/\\/g, "/")
+  if (g === p) return true
+  // 转正则：先占位 **，再处理 * ?，最后还原 ** 为 .*
+  const PH = "\u0000"
+  let re = g.replace(/\*\*/g, PH).replace(/[.+^${}()|[\]\\]/g, "\\$&")
+  re = re.replace(/\*/g, "[^/]*").replace(/\?/g, "[^/]")
+  re = re.split(PH).join(".*")
+  try {
+    return new RegExp(`^${re}$`).test(p)
+  } catch {
+    return false
+  }
+}
+
+function inScope(scope: string[], relPosix: string): boolean {
+  return scope.some((g) => scopeMatch(g, relPosix))
+}
+
+// 从 shell 命令中提取显式写目标（重定向 > >>、tee 文件参数）。
+// 只做启发式：Copy-Item/cp/mv 等 cmdlet 不解析，缺口由 edit 钩子覆盖。
+function shellWriteTargets(command: string): string[] {
+  const targets: string[] = []
+  const redir = /(?:^|[\s;&|])(?:\d*)>>?\s*("([^"]+)"|'([^']+)'|([^\s"';&|]+))/g
+  let m: RegExpExecArray | null
+  while ((m = redir.exec(command)) !== null) {
+    const t = m[2] ?? m[3] ?? m[4]
+    if (!t || t.startsWith("&") || /^\d+$/.test(t) || t.toUpperCase() === "NUL") continue
+    targets.push(t)
+  }
+  const teeRe = /(?:^|[\s;&|])tee(?:\s+-[^\s]+)*\s+("([^"]+)"|'([^']+)'|([^\s"';&|]+))/g
+  while ((m = teeRe.exec(command)) !== null) {
+    const t = m[2] ?? m[3] ?? m[4]
+    if (!t || t.startsWith("-")) continue
+    targets.push(t)
+  }
+  return targets
+}
+
+// 写目标落在仓库内但超出 scope 时返回它们；仓库外/不可解析的不管。
+function outOfScopeTargets(root: string, scope: string[], command: string): string[] {
+  const bad: string[] = []
+  for (const raw of shellWriteTargets(command)) {
+    const t = raw.replace(/\\/g, "/")
+    if (t.startsWith("~")) continue
+    let rel: string
+    if (path.posix.isAbsolute(t) || /^[A-Za-z]:\//.test(t)) {
+      const r = path.relative(root, path.normalize(t))
+      if (r === "" || r.startsWith("..") || path.isAbsolute(r)) continue
+      rel = r.split(path.sep).join(path.posix.sep)
+    } else {
+      if (t.startsWith("..")) continue
+      rel = path.posix.normalize(t)
+      if (rel.startsWith("..") || path.posix.isAbsolute(rel)) continue
+    }
+    if (!inScope(scope, rel)) bad.push(rel)
+  }
+  return [...new Set(bad)]
+}
+
+function normalizeScopeEntry(raw: unknown): string | null {
+  if (typeof raw !== "string") return null
+  const t = raw.trim().replace(/\\/g, "/").replace(/^\.\//, "")
+  if (!t || t.startsWith("..") || t.startsWith("/") || t.includes("\0")) return null
+  return t
+}
+
 async function resolveRoot(ctx: Ctx, sessionID: string): Promise<string | null> {
   const cached = rootCache.get(sessionID)
   if (cached !== undefined) return cached
@@ -535,12 +606,13 @@ export default {
             featureDir: normalized,
             phase: "impact-pending",
             affectedStages: [],
+            scope: [],
             snapshots: snapshotFeature(root, normalized),
             summaries: {},
           })
           return ok({
             featureDirectory: normalized,
-            next: "call speckit_rework_assess_impact before editing; only affected stages and their downstream dependencies will be gated",
+            next: "call speckit_rework_assess_impact with affectedStages AND scope (repo-relative writable globs) before editing",
           })
         },
       })
@@ -597,14 +669,20 @@ export default {
               type: "string",
               description: "Impact assessment, including why omitted stages do not need changes.",
             },
+            scope: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "REQUIRED: repo-relative file globs writable during implementation (e.g. ['docs/paper-outline.md', 'scripts/plot_*.py']). Writes outside scope are denied once implementation opens.",
+            },
           },
-          required: ["affectedStages", "summary"],
+          required: ["affectedStages", "summary", "scope"],
           additionalProperties: false,
         },
         execute: async (input, context) => {
           const sessionID = context.sessionID as string
           const txn = await getActiveTxn(c, sessionID)
-          const parsed = input as { affectedStages?: unknown; summary?: unknown }
+          const parsed = input as { affectedStages?: unknown; summary?: unknown; scope?: unknown }
           if (!txn || txn.phase !== "impact-pending") {
             return fail("impact assessment is only accepted before rework stage gates")
           }
@@ -615,6 +693,17 @@ export default {
           }
           if (typeof parsed.summary !== "string" || parsed.summary.trim().length === 0) {
             return fail("summary is required and must explain why omitted stages are unaffected")
+          }
+          if (!Array.isArray(parsed.scope) || parsed.scope.length === 0) {
+            return fail("scope is required: list repo-relative writable file globs for this implementation")
+          }
+          const scope: string[] = []
+          for (const entry of parsed.scope as unknown[]) {
+            const n = normalizeScopeEntry(entry)
+            if (n === null) {
+              return fail(`invalid scope entry '${String(entry)}': must be a repo-relative path glob`)
+            }
+            scope.push(n)
           }
 
           const affected = new Set(parsed.affectedStages as Stage[])
@@ -631,6 +720,7 @@ export default {
           txn.affectedStages = (["spec", "plan", "tasks", "checklists"] as Stage[])
             .filter((stage) => affected.has(stage))
           txn.summaries = { ...txn.summaries, impact: parsed.summary.trim() }
+          txn.scope = scope
           txn.phase = txn.affectedStages.length > 0
             ? phaseForStage(txn.affectedStages[0])
             : "implementation-open"
@@ -639,6 +729,42 @@ export default {
             affectedStages: txn.affectedStages,
             phase: txn.phase,
             next: txn.affectedStages[0] ?? "implementation",
+          })
+        },
+      })
+
+      editor.add({
+        name: "speckit_rework_close",
+        description:
+          "Close the current rework transaction after implementation is done. After closing, all edits are blocked until a new select + impact assessment.",
+        input: {
+          type: "object",
+          properties: {
+            summary: {
+              type: "string",
+              description: "What was implemented within the declared scope.",
+            },
+          },
+          required: ["summary"],
+          additionalProperties: false,
+        },
+        execute: async (input, context) => {
+          const sessionID = context.sessionID as string
+          const txn = await getActiveTxn(c, sessionID)
+          if (!txn) return fail("no active rework transaction")
+          if (txn.phase !== "implementation-open") {
+            return fail(`cannot close from phase ${txn.phase}`)
+          }
+          const summary = (input as { summary?: unknown }).summary
+          if (typeof summary !== "string" || summary.trim().length === 0) {
+            return fail("summary is required")
+          }
+          txn.summaries.impact = `${txn.summaries.impact ?? ""} [closed] ${summary.trim()}`
+          txn.phase = "closed"
+          touchTxn(sessionID, txn)
+          return ok({
+            phase: txn.phase,
+            next: "implementation closed; call speckit_rework_select_feature + speckit_rework_assess_impact before further edits",
           })
         },
       })
@@ -665,7 +791,7 @@ export default {
           if (txn.phase === "blocked") {
             return fail(`transaction blocked: ${txn.blockReason ?? "unknown"}`)
           }
-          if (txn.phase === "implementation-open" || txn.phase === "needs-feature") {
+          if (txn.phase === "implementation-open" || txn.phase === "needs-feature" || txn.phase === "closed") {
             return fail(`gate not accepted in phase ${txn.phase}`)
           }
           if (
@@ -814,8 +940,9 @@ export default {
       const existing = await getActiveTxn(c, sessionID)
       // An active or blocked transaction is never replaced by a later prompt.
       // Recovery is explicit: use speckit_rework_reset, select the feature again,
-      // or use /speckit.*.
-      if (existing) return
+      // or use /speckit.*. A closed transaction is finished and may be replaced.
+      if (existing && existing.phase !== "closed") return
+      if (existing) deleteTxn(existing)
       const feature = pointedEligibleFeature(root)
       // The normal Spec Kit flow and not-yet-implemented features are outside
       // this plugin's scope. The official feature pointer is the authority for
@@ -826,6 +953,7 @@ export default {
         featureDir: feature.directory,
         phase: "impact-pending",
         affectedStages: [],
+        scope: [],
         snapshots: snapshotFeature(root, feature.directory),
         summaries: {},
       })
@@ -837,12 +965,16 @@ export default {
       const lines = [
         "[speckit-rework-gate] Rework transaction state machine (authoritative):",
         `phase=${txn.phase} feature=${txn.featureDir || "(unselected)"}`,
-        "Rules: /speckit.* commands bypass this plugin. Before implementation, call speckit_rework_assess_impact with affectedStages and explain why omitted stages are unaffected. Only affected stages and their downstream dependencies are gated, in spec -> plan -> tasks -> checklists order. An empty affectedStages list opens implementation after the assessment.",
-        "Never create features, never switch git branches, never bypass the impact assessment. Blocked transactions stay blocked unless explicitly reset.",
+        "Rules: /speckit.* commands bypass this plugin. Before implementation, call speckit_rework_assess_impact with affectedStages, scope (repo-relative writable globs), and explain why omitted stages are unaffected. Only affected stages and their downstream dependencies are gated, in spec -> plan -> tasks -> checklists order. An empty affectedStages list opens implementation after the assessment. Close with speckit_rework_close when done.",
+        "Never create features, never switch git branches, never bypass the impact assessment. Shell redirect/tee targets outside scope are denied; other shell file writes (cp/mv/cmdlets) are not auto-checked, prefer edit tools. Blocked transactions stay blocked unless explicitly reset.",
       ]
       if (txn.summaries.impact) lines.push(`impactAssessment=${txn.summaries.impact}`)
       if (txn.affectedStages.length > 0) lines.push(`affectedStages=${txn.affectedStages.join(",")}`)
+      if (txn.scope.length > 0) lines.push(`scope=${txn.scope.join(",")}`)
       if (txn.phase === "blocked" && txn.blockReason) lines.push(`blockReason=${txn.blockReason}`)
+      if (txn.phase === "closed") {
+        lines.push("Transaction closed. Further edits require speckit_rework_select_feature + speckit_rework_assess_impact.")
+      }
       if (txn.phase === "implementation-open") {
         lines.push(
         "Implementation is open for this session. tasks.md checkbox updates only via speckit_rework_complete_task; task text is frozen. If implementation reveals an upstream artifact was missed, stop implementation and start a new rework assessment.",
@@ -858,7 +990,18 @@ export default {
       if (event.action !== "edit" && event.action !== "shell") return
 
       if (event.action === "shell") {
-        if (txn.phase === "implementation-open") return
+        if (txn.phase === "implementation-open") {
+          for (const resource of event.resources) {
+            if (!shellLooksLikeWrite(resource)) continue
+            const bad = outOfScopeTargets(txn.root, txn.scope, resource)
+            if (bad.length > 0) {
+              event.effect = "deny"
+              event.message = `[speckit-rework-gate] Shell write target outside assessed scope: ${bad.join(", ")}. Scope=[${txn.scope.join(", ")}]. Re-run speckit_rework_assess_impact with an expanded scope.`
+              return
+            }
+          }
+          return
+        }
         for (const resource of event.resources) {
           if (shellLooksLikeWrite(resource)) {
             event.effect = "deny"
@@ -877,12 +1020,14 @@ export default {
           event.message = "[speckit-rework-gate] Spec Kit infrastructure is always read-only in rework mode."
           return
         }
-        if (txn.phase === "blocked" || txn.phase === "needs-feature") {
+        if (txn.phase === "blocked" || txn.phase === "needs-feature" || txn.phase === "closed") {
           event.effect = "deny"
           event.message =
             txn.phase === "blocked"
               ? `[speckit-rework-gate] Transaction blocked: ${txn.blockReason ?? "unknown"}. No edits allowed.`
-              : "[speckit-rework-gate] Select a feature first via speckit_rework_list_features + speckit_rework_select_feature. No edits allowed before that."
+              : txn.phase === "closed"
+                ? "[speckit-rework-gate] Transaction closed. Further edits require speckit_rework_select_feature + speckit_rework_assess_impact."
+                : "[speckit-rework-gate] Select a feature first via speckit_rework_list_features + speckit_rework_select_feature. No edits allowed before that."
           return
         }
         if (txn.phase === "implementation-open") {
@@ -892,6 +1037,11 @@ export default {
               kind.stage === "tasks"
                 ? "[speckit-rework-gate] tasks.md text is frozen. Use speckit_rework_complete_task for checkbox updates."
                 : "[speckit-rework-gate] Spec artifacts are frozen once implementation is open."
+            return
+          }
+          if (kind.kind === "impl" && !inScope(txn.scope, kind.rel)) {
+            event.effect = "deny"
+            event.message = `[speckit-rework-gate] ${kind.rel} is outside the assessed scope [${txn.scope.join(", ")}]. Re-run speckit_rework_assess_impact with an expanded scope.`
             return
           }
           continue

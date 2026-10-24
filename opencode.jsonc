@@ -2,8 +2,6 @@
     "$schema": "https://opencode.ai/config.json",
     // 默认模型
     "model": "opencode-go/muse-spark-1.3-contributor#xhigh",
-    // 默认主 Agent
-    "default_agent": "commander",
     // 自动压缩: context=1048576, 45%触发(约471859) -> buffer=576717; 保留最近15%(约157286)
     "compaction": {
         "auto": true,
@@ -14,9 +12,9 @@
     },
     "agents": {
         "title": {
-            "model": "opencode-go/muse-spark-1.3-contributor"
+            "model": "opencode-go/muse-spark-1.3-contributor#xhigh"
         },
-        // 内置维护 Agent 显式指定便宜模型，避免继承 commander 的 gemini 额度被 guard 阻拦
+        // 内置维护 Agent 显式指定便宜模型，避免走 Gemini 被 manager-gemini-guard 阻拦
         "compaction": {
             "model": "opencode-go/muse-spark-1.3-contributor"
         },

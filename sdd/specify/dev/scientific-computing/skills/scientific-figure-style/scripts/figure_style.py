@@ -19,6 +19,7 @@ Usage:
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Five Okabe-Ito colors meeting 3:1 against white (k-dense subset).
 # Still pair each with linestyle/marker; palette alone is not accessibility.
@@ -52,6 +53,31 @@ LINESTYLES = ["-", "--", "-.", ":"]
 MARKERS = ["o", "s", "^", "D", "v", "x", "+"]
 
 
+def cell_edges(centers, lo=None, hi=None):
+    """Bin edges for a cell-edge heatmap (`pcolormesh(shading="flat")`).
+
+    Rule: a heatmap value is a bin, not a point. Interior edges sit midway
+    between neighbouring centres; the two outer edges extend half a step and
+    can be pinned to the plotted range with ``lo``/``hi``. Ticks then land on
+    cell boundaries, so endpoint ticks sit exactly on the frame corners.
+
+    Never mix centre-based shading (`shading="nearest"`) with endpoint ticks:
+    the outer half-cells get clipped and the tick no longer marks a boundary.
+    """
+    c = np.asarray(centers, dtype=float)
+    if c.ndim != 1 or c.size < 2:
+        raise ValueError("centers must be a 1-D array with at least two points")
+    edges = np.empty(c.size + 1)
+    edges[1:-1] = 0.5 * (c[:-1] + c[1:])
+    edges[0] = c[0] - 0.5 * (c[1] - c[0])
+    edges[-1] = c[-1] + 0.5 * (c[-1] - c[-2])
+    if lo is not None:
+        edges[0] = lo
+    if hi is not None:
+        edges[-1] = hi
+    return edges
+
+
 def apply_figure_style(palette=None):
     """Set style-only rcParams. Call before creating figures."""
     colors = palette or DEFAULT_PALETTE
@@ -66,32 +92,34 @@ def apply_figure_style(palette=None):
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
             "svg.fonttype": "none",
-            "font.family": "sans-serif",
-            "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
-            "font.size": 8,
-            "axes.labelsize": 8,
-            "axes.titlesize": 8,
-            "xtick.labelsize": 7,
-            "ytick.labelsize": 7,
-            "legend.fontsize": 7,
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "STIXGeneral", "DejaVu Serif"],
+            "font.size": 13,
+            "axes.labelsize": 15,
+            "axes.titlesize": 16,
+            "xtick.labelsize": 13,
+            "ytick.labelsize": 13,
+            "legend.fontsize": 14,
             "legend.frameon": False,
             "legend.loc": "best",
             # Built-in mathtext only; no system LaTeX dependency.
             # Caller must still wrap math in $...$ with a raw string.
             "text.usetex": False,
-            "mathtext.fontset": "dejavusans",
+            "mathtext.fontset": "stix",
             "mathtext.default": "regular",
-            "axes.linewidth": 0.6,
-            "xtick.major.width": 0.6,
-            "ytick.major.width": 0.6,
-            "xtick.major.size": 3.0,
-            "ytick.major.size": 3.0,
-            "lines.linewidth": 1.5,
-            "lines.markersize": 4,
-            "lines.markeredgewidth": 0.5,
+            "axes.linewidth": 1.0,
+            "xtick.major.width": 1.0,
+            "ytick.major.width": 1.0,
+            "xtick.major.size": 4.0,
+            "ytick.major.size": 4.0,
+            "xtick.minor.width": 0.8,
+            "ytick.minor.width": 0.8,
+            "lines.linewidth": 1.8,
+            "lines.markersize": 6,
+            "lines.markeredgewidth": 0.8,
             "axes.grid": False,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
+            "axes.spines.top": True,
+            "axes.spines.right": True,
             "axes.prop_cycle": mpl.cycler(color=colors),
             "image.cmap": "viridis",
             "axes.unicode_minus": False,
@@ -113,8 +141,45 @@ def style_axes(ax, xlabel=None, ylabel=None):
     return ax
 
 
-def finalize_figure(fig, path, dpi=300):
-    """Save with embedded fonts. PDF/SVG for vector, PNG as preview."""
+def effective_min_text_pt(fig, target_width_mm):
+    """Smallest text size after the drawn canvas is scaled to `target_width_mm`.
+
+    Journals specify text size at the *final printed* width, so a figure drawn
+    on a wide canvas and shrunk in LaTeX loses points linearly:
+    ``effective_pt = drawn_pt * target_width_mm / drawn_width_mm``. Use this to
+    check the 8 pt floor before export (86 mm = APS single column).
+    """
+    scale = float(target_width_mm) / (fig.get_figwidth() * 25.4)
+    sizes = []
+    for ax in fig.axes:
+        if ax.xaxis.label.get_text():
+            sizes.append(ax.xaxis.label.get_fontsize())
+        if ax.yaxis.label.get_text():
+            sizes.append(ax.yaxis.label.get_fontsize())
+        sizes.extend(t.label1.get_fontsize() for t in ax.xaxis.get_major_ticks())
+        sizes.extend(t.label1.get_fontsize() for t in ax.yaxis.get_major_ticks())
+        if ax.get_title():
+            sizes.append(ax.title.get_fontsize())
+        legend = ax.get_legend()
+        if legend is not None:
+            sizes.extend(text.get_fontsize() for text in legend.get_texts())
+    return min(sizes) * scale if sizes else None
+
+
+def finalize_figure(fig, path, dpi=300, max_ticks=5):
+    """Save with embedded fonts. PDF/SVG for vector, PNG as preview.
+
+    Default auto tick locators are thinned to at most `max_ticks` major
+    ticks per axis (`MaxNLocator(nbins=max_ticks-1)`); explicitly set
+    locators (e.g. fixed pi ticks) are kept.
+    """
+    from matplotlib.ticker import AutoLocator, MaxNLocator
+
+    nbins = max(1, max_ticks - 1)
+    for ax in fig.axes:
+        for axis in (ax.xaxis, ax.yaxis):
+            if isinstance(axis.get_major_locator(), AutoLocator):
+                axis.set_major_locator(MaxNLocator(nbins=nbins, prune=None))
     fig.savefig(path, dpi=dpi, bbox_inches="tight", facecolor="white",
                 transparent=False)
     return path

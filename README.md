@@ -6,18 +6,18 @@
 
 | 路径 | 说明 |
 |------|------|
-| `AGENTS.md` | 全局工作规则（语言、修改原则、Spec Kit 返工门禁、skill 调用） |
+| `AGENTS.md` | 全局工作规则（语言、skill 调用） |
 | `opencode.jsonc` | 主配置：默认模型、provider、权限、MCP、插件 |
 | `cli.json` / `service.json` | TUI 显示配置 / `serve` 服务配置 |
 | `skills/` | 自动加载，共 10 个 skill |
-| `agents/` | 7 个 Agent：主控 `commander` + 5 个专职子 Agent（`explorer`/`researcher`/`integrator`/`implementer`/`reviewer`）+ `speckit-guide` |
-| `plugins/` | 2 个本地插件：`commander-model-guard.ts`（`gemini-4-argon-contributor` 仅限 `commander` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁） |
+| `agents/` | 5 个 Agent：包工头主控 `manager` + 3 个异构子 Agent（`coder`/`env-ops`/`reviewer`）+ `speckit-guide` |
+| `plugins/` | 2 个本地插件：`manager-gemini-guard.ts`（Gemini 4 系模型仅限 `manager` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁，含 `scope` 硬约束与 `close`） |
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
 | `launch-mode/` | 启动方式插件，当前 `mode: desktop` |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
 | `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
 
-主配置要点（见 `opencode.jsonc`）：默认 Agent 为 `commander`，默认模型 `opencode-go/muse-spark-1.3-contributor#xhigh`；provider 白名单放行 `opencode-go` + `vankit-0.06` / `vankit-0.15` / `vankit-0.25` / `vankit-0.55`；MCP 为 `playwright`、`zotero`（本地 `zotero-mcp`），`context7` 由 `@upstash/context7-opencode` 插件托管。
+主配置要点（见 `opencode.jsonc`）：默认模型 `opencode-go/muse-spark-1.3-contributor#xhigh`，未设 `default_agent`（主会话默认直接处理，需要时切到 `manager` 主控）；provider 白名单放行 `opencode-go` + `vankit-0.06` / `vankit-0.15` / `vankit-0.25` / `vankit-0.55`；MCP 为 `playwright`、`zotero`（本地 `zotero-mcp`），`context7` 由 `@upstash/context7-opencode` 插件托管。
 
 ## 使用
 

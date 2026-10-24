@@ -32,7 +32,7 @@
 ## 仓库导航
 
 - [README.md](../README.md) — 本仓库总览：目录结构、Skills 清单、关键配置
-- [AGENTS.md](../AGENTS.md) — 全局工作规则（语言、修改原则、Spec Kit 返工门禁、SDD 目录、技能调用）
+- [AGENTS.md](../AGENTS.md) — 全局工作规则（语言、技能调用）
 - `sdd/` — 规范文档：
   - [sdd/change-oriented-computing/](../sdd/change-oriented-computing/README.md) — 变更驱动计算（COC）理论总纲；[cognitive-loop.md](../sdd/change-oriented-computing/cognitive-loop.md) — 人机认知协作闭环（结果可信度 vs 个人理解深度 L1–L3、选择性理解与认知正反馈循环）
   - [sdd/openspec/](../sdd/openspec/install.md) — OpenSpec CLI 安装、配置与轻量工作流

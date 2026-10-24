@@ -46,14 +46,14 @@ Ref to [instructions](https://opencode.ai/v2/docs/instructions)
 ~/.config/opencode/
 ├── opencode.jsonc       # 全局运行配置（模型、权限、MCP、插件…）
 ├── AGENTS.md            # 全局自然语言规则
-├── agents/              # 自定义 Agent（本仓库 7 个）
-│   ├── commander.md     # 主控 Agent（默认）
-│   ├── explorer.md / researcher.md / integrator.md / implementer.md / reviewer.md
-│   │                    # 5 个专职子 Agent
+├── agents/              # 自定义 Agent（本仓库 5 个）
+│   ├── manager.md       # 包工头主控（按需切换，不读源码）
+│   ├── coder.md / env-ops.md / reviewer.md
+│   │                    # 3 个异构子 Agent：编码 / 环境终端 / 只读预审
 │   └── speckit-guide.md # Spec Kit 流程 Agent
 ├── plugins/             # 本地插件
-│   ├── commander-model-guard.ts   # gemini-4-argon-contributor 仅限 commander
-│   └── speckit-rework-gate.ts     # Spec Kit 返工门禁
+│   ├── manager-gemini-guard.ts   # Gemini 4 系模型仅限 manager 使用
+│   └── speckit-rework-gate.ts     # Spec Kit 返工门禁（含 scope 硬约束与 close）
 ├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 10 个）
 ├── sdd/                 # 规范驱动开发文档（COC / OpenSpec / GitHub Spec Kit）
 ├── launch-mode/         # 启动方式插件
