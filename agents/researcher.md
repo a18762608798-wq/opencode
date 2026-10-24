@@ -1,9 +1,10 @@
 ---
 description: 外部技术文档与学术文献检索专家（只读），使用 Muse Spark 1.3 xhigh 负责网页搜索、Context7 文档查询及 Zotero 只读检索
 mode: subagent
-model: opencode-go/muse-spark-1.3-contributor#xhigh
+model: opencode-go/muse-spark-1.3-contributor
+variant: xhigh
 color: "#06b6d4"
-steps: 15
+steps: 30
 permissions:
   - action: "*"
     resource: "*"
@@ -53,6 +54,27 @@ permissions:
   - action: zotero_export_bibliography
     resource: "*"
     effect: allow
+  - action: read
+    resource: "*package.json"
+    effect: allow
+  - action: read
+    resource: "*pyproject.toml"
+    effect: allow
+  - action: read
+    resource: "*Cargo.toml"
+    effect: allow
+  - action: read
+    resource: "*go.mod"
+    effect: allow
+  - action: read
+    resource: "*requirements*.txt"
+    effect: allow
+  - action: read
+    resource: "specs/**"
+    effect: allow
+  - action: read
+    resource: "*.env*"
+    effect: deny
 ---
 
 你是外部技术情报与学术文献研究员（Researcher）。你负责过滤网页搜索结果、Context7 官方文档和 Zotero 文献全文中的海量噪声，向 Commander 返回经过核实的结论。

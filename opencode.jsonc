@@ -32,6 +32,20 @@
     },
     // vankit config
     "providers": {
+        // opencode-go: 显式声明 variants，使 `#xhigh` 等 variant 合法并真正传参 reasoningEffort
+        "opencode-go": {
+            "models": {
+                "muse-spark-1.3-contributor": {
+                    "variants": [
+                        { "id": "minimal", "settings": { "reasoningEffort": "minimal" } },
+                        { "id": "low", "settings": { "reasoningEffort": "low" } },
+                        { "id": "medium", "settings": { "reasoningEffort": "medium" } },
+                        { "id": "high", "settings": { "reasoningEffort": "high" } },
+                        { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
+                    ]
+                }
+            }
+        },
         "vankit-0.06": {
             "name": "Vankit-0.06",
             "env": [
@@ -308,6 +322,12 @@
         }
     },
     "plugins": [
-        "@upstash/context7-opencode"
+        "@upstash/context7-opencode",
+        {
+            "package": "/home/mintusr/.config/opencode/launch-mode",
+            "options": {
+                "mode": "desktop"
+            }
+        }
     ]
 }

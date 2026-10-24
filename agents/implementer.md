@@ -1,9 +1,10 @@
 ---
-description: 代码实现与构建测试工程师，使用 MiMo-V2.6-Pro 负责创建修改本地文件、代码重构迁移、运行测试与复杂终端排障
+description: 代码实现与构建测试工程师，使用 Muse Spark 1.3 xhigh 负责创建修改本地文件、代码重构迁移、运行测试与复杂终端排障
 mode: subagent
-model: opencode-go/mimo-v2.6-pro
+model: opencode-go/muse-spark-1.3-contributor
+variant: xhigh
 color: "#10b981"
-steps: 25
+steps: 40
 permissions:
   - action: "*"
     resource: "*"

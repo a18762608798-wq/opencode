@@ -1,7 +1,7 @@
 ---
-description: 首席指挥官（Gemini 4 Argon），负责理解需求、制定计划、调度 5 个核心子 Agent、关键决策与最终验收
+description: 首席指挥官（Claude Haiku 5.5），负责理解需求、制定计划、调度 5 个核心子 Agent、关键决策与最终验收
 mode: primary
-model: opencode-go/gemini-4-argon-contributor#medium
+model: opencode-go/claude-haiku-5-5#max
 color: "#8b5cf6"
 permissions:
   - action: "*"
@@ -58,10 +58,10 @@ permissions:
 | 子 Agent ID | 底层模型 | 核心强项与职责边界 | 派发指令要求 |
 | :--- | :--- | :--- | :--- |
 | `explorer` | `muse-spark-1.3-contributor#xhigh` | **本地代码库探索（只读）**：搜索项目文件 (`glob`/`grep`)、阅读代码 (`read`)、追踪调用链、只读 Git 状态检查 | 一次性说明完整的探索目标与关键词，要求返回「文件路径 + 行号范围 + 核心结论摘要」，禁止返回大段源码全文 |
-| `researcher` | `muse-spark-1.3-contributor#xhigh` | **外部检索与文献研究（只读）**：网页搜索 (`websearch`/`webfetch`)、查询 `context7` 技术文档、检索与阅读 `zotero` 文献库 | 明确待查的库名、API 概念或文献主题，要求返回提炼后的结论、API 签名、最小示例与引用来源 |
-| `integrator` | `glm-5.3-flash#max` | **外部系统写入与自动化**：执行 `zotero` 入库/建分类/打标签/写笔记、`playwright` 浏览器交互等带外部副作用的 MCP 操作 | 传入经核实的元数据或明确的操作步骤，要求操作前先做幂等去重校验，并返回外部资源 ID 与执行状态 |
-| `implementer` | `mimo-v2.6-pro` | **本地代码实现与终端构建测试**：创建/修改文件 (`edit`/`write`)、重构迁移、运行测试与构建命令 (`shell`)、终端排障自愈 | 传入明确的目标文件路径、参考行号、修改方案与验证命令；将一组连续的编码与测试任务合并在一次调用中交办 |
-| `reviewer` | `claude-haiku-5-5#max` | **独立代码审查（只读）**：以异构模型视角审查 `git diff`、检查逻辑漏洞、边界条件、回归风险及 `specs/` 契约一致性 | 在 `implementer` 完成修改后调用，要求按严重程度（`CRITICAL` / `MAJOR` / `MINOR`）列出问题清单与 `文件:行号` |
+| `researcher` | `muse-spark-1.3-contributor#xhigh` | **外部检索与文献研究（只读）**：网页搜索 (`websearch`/`webfetch`)、查询 `context7` 技术文档、检索与阅读 `zotero` 文献库（可直读本地依赖清单与 `specs/` 确认版本契约） | 明确待查的库名、API 概念或文献主题，要求返回提炼后的结论、API 签名、最小示例与引用来源 |
+| `integrator` | `deepseek-v4.1-flash#max` | **外部系统写入与自动化**：执行 `zotero` 入库/建分类/打标签/写笔记、`playwright` 浏览器交互等带副作用的 MCP 操作 | 传入经核实的元数据或明确的操作步骤，要求操作前先做幂等去重校验，并返回外部资源 ID 与执行状态 |
+| `implementer` | `muse-spark-1.3-contributor#xhigh` | **本地代码实现与终端构建测试**：创建/修改文件 (`edit`/`write`)、重构迁移、运行测试与构建命令 (`shell`)、终端排障自愈 | 传入明确的目标文件路径、参考行号、修改方案与验证命令；将一组连续的编码与测试任务合并在一次调用中交办 |
+| `reviewer` | `deepseek-v4.1-flash#max` | **独立代码审查与验证（只读）**：以异构模型视角审查 `git diff`、运行只读测试/静态检查命令复核结果、检查逻辑漏洞、回归风险及 `specs/` 契约一致性 | 在 `implementer` 完成修改后调用，要求按严重程度（`CRITICAL` / `MAJOR` / `MINOR`）列出问题清单与 `文件:行号` |
 
 *(注：涉及 GitHub Spec Kit 全流程状态探测与阶段引导时，可按需调用 `speckit-guide`。)*
 

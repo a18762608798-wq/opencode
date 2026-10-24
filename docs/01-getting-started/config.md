@@ -54,8 +54,9 @@ Ref to [instructions](https://opencode.ai/v2/docs/instructions)
 ├── plugins/             # 本地插件
 │   ├── commander-model-guard.ts   # gemini-4-argon-contributor 仅限 commander
 │   └── speckit-rework-gate.ts     # Spec Kit 返工门禁
-├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 12 个）
+├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 10 个）
 ├── sdd/                 # 规范驱动开发文档（COC / OpenSpec / GitHub Spec Kit）
+├── launch-mode/         # 启动方式插件
 └── docs/                # 本地手册（含 web/ 手机浏览器访问指南）
 ```
 

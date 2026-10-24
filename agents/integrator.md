@@ -1,7 +1,8 @@
 ---
-description: 外部系统写入与浏览器自动化专员，使用 GLM-5.3-Flash max 执行 Zotero 入库/标注管理、Playwright 交互等带副作用的 MCP 操作
+description: 外部系统写入与浏览器自动化专员，使用 DeepSeek V4.1 Flash max 执行 Zotero 入库/标注管理、Playwright 交互等带副作用的 MCP 操作
 mode: subagent
-model: opencode-go/glm-5.3-flash#max
+model: opencode-go/deepseek-v4.1-flash
+variant: max
 color: "#f59e0b"
 steps: 20
 permissions:

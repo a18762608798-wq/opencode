@@ -1,9 +1,10 @@
 ---
 description: 本地代码库探索与架构定位专家（只读），使用 Muse Spark 1.3 xhigh 极速搜索项目文件、分析调用链与查看 Git 状态
 mode: subagent
-model: opencode-go/muse-spark-1.3-contributor#xhigh
+model: opencode-go/muse-spark-1.3-contributor
+variant: xhigh
 color: "#3b82f6"
-steps: 15
+steps: 30
 permissions:
   - action: "*"
     resource: "*"

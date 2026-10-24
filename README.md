@@ -9,10 +9,11 @@
 | `AGENTS.md` | 全局工作规则（语言、修改原则、Spec Kit 返工门禁、skill 调用） |
 | `opencode.jsonc` | 主配置：默认模型、provider、权限、MCP、插件 |
 | `cli.json` / `service.json` | TUI 显示配置 / `serve` 服务配置 |
-| `skills/` | 自动加载，共 12 个 skill |
+| `skills/` | 自动加载，共 10 个 skill |
 | `agents/` | 7 个 Agent：主控 `commander` + 5 个专职子 Agent（`explorer`/`researcher`/`integrator`/`implementer`/`reviewer`）+ `speckit-guide` |
 | `plugins/` | 2 个本地插件：`commander-model-guard.ts`（`gemini-4-argon-contributor` 仅限 `commander` 使用）、`speckit-rework-gate.ts`（Spec Kit 返工门禁） |
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
+| `launch-mode/` | 启动方式插件，当前 `mode: desktop` |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
 | `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |
 
@@ -54,11 +55,9 @@
 | `env-proxy` | 本地代理环境变量开关 |
 | `find-skills` | 发现和安装 skills |
 | `git-push-all` | 批量推送全部 git 仓库（明确指定才触发） |
-| `knowledge-organizer` | 对话知识点归档到知识库 |
 | `problem-recorder` | 问题与原文存档为 Markdown（明确要求才触发） |
 | `product-doc-writer` | 成套产品说明文档（安装+配置+使用，Linux Mint） |
 | `skill-creator` | 创建和优化 skills |
-| `structured-proof` | 数学物理链式结构化证明 |
 | `zotero-book-hunter` | 找书/讲义并入库 Zotero |
 | `zotero-paper-hunter` | 按任务找论文并入库 Zotero `paper/inbox` |
 
