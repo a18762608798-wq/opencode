@@ -22,7 +22,7 @@
 
 1. 此目录放在 `~/.config/opencode`。
 2. `npm install` 安装插件依赖（`@opencode/plugin`）。
-3. 设置环境变量：`VANKIT_0_06_API_KEY`、`VANKIT_0_15_API_KEY`、`VANKIT_0_25_API_KEY`、`VANKIT_0_55_API_KEY`、`ZOTERO_API_TOKEN`、`ZOTERO_USERID`。
+3. 设置环境变量：`VANKIT_0_06_API_KEY`、`VANKIT_0_15_API_KEY`、`VANKIT_0_25_API_KEY`、`VANKIT_0_55_API_KEY`、`ZOTERO_API_KEY`、`ZOTERO_LIBRARY_ID`。
 4. 运行 `opencode`。
 
 ## SDD：规范驱动开发（Spec-Driven Development）与 GitHub Spec Kit（`sdd/`）
