@@ -56,7 +56,7 @@ Ref to [instructions](https://opencode.ai/v2/docs/instructions)
 │   └── speckit-rework-gate.ts     # Spec Kit 返工门禁（含 scope 硬约束与 close）
 ├── skills/              # 自定义 skill（SKILL.md + supporting files，本仓库 10 个）
 ├── sdd/                 # 规范驱动开发文档（COC / OpenSpec / GitHub Spec Kit）
-├── launch-mode/         # 公式格式注入插件（LaTeX $ 规范）
+├── formula-style/        # 公式格式注入插件（LaTeX $ 规范）
 └── docs/                # 本地手册（含 web/ 手机浏览器访问指南）
 ```
 

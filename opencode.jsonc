@@ -322,7 +322,7 @@
     "plugins": [
         "@upstash/context7-opencode",
         {
-            "package": "/home/mintusr/.config/opencode/launch-mode"
+            "package": "/home/mintusr/.config/opencode/formula-style"
         }
     ]
 }

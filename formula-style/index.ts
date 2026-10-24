@@ -1,7 +1,7 @@
 import type { Plugin } from "@opencode/plugin"
 
 export default {
-  id: "launch-mode",
+  id: "formula-style",
   async setup(ctx) {
     // 数学公式规则统一注入（含对话回复与写入 Markdown 文件，统一使用 $ / $$ 格式）。
     const text =
