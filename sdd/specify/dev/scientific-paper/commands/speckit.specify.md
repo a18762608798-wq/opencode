@@ -32,8 +32,9 @@ description: 从论文主线创建或更新 paper feature specification。
    - 新建 feature 时以该模板创建 `spec.md`。
    - 更新 feature 时保留已有有效内容，只修改本次需求涉及的部分。
 
-5. 根据用户输入、上游产物（`specs/expXX`、`S##`、`D##`、`figs/`、`docs/paper-outline.md`）
+5. 根据用户输入、`docs/paper-map.md` 与上游产物（`specs/expXX`、`S##`、`D##`、`figs/`、`docs/paper-outline.md`）
    填写 `spec.md`。
-   - 每条主张写 `CLM-###` 并绑定证据；证据不存在不编，记 `GAP-DATA`。
+   - 落实已确认的 `paper-map`，选择、组织和表述上游已确定的结果；不得擅自新增、升级或改变科学结论。
+   - 只为需要明确管理的核心科学主张写 `CLM-###` 并绑定证据；证据不存在不编，记 `GAP-DATA`。
    - 引用需求记 `CIT-###`，不预填具体文献。
    - 不写 LaTeX 实现细节。

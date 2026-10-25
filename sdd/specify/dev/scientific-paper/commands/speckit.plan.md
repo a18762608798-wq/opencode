@@ -23,9 +23,9 @@ description: 根据当前 paper feature specification 生成写作计划。
      在 plan 中写明先行 / 冻结安排。
 
 5. 章节与 skill 映射时：
-   - 遵守项目指定的 paper-* skills。
+   - 章节顺序与分工服从已确认的 `docs/paper-map.md`，遵守项目指定的 paper-* skills。
    - 保持 feature 职责边界。
-   - Related Work 内容并入 Introduction（PRA 无独立章节）。
+   - Related Work 对 PRA 论文通常并入 Introduction；是否单独设节服从已确认的 paper-map 与具体稿件需求。
    - 作图本身不在本 preset 内；`FIG` 只管放图进文，不管造图。
 
 6. LaTeX 工程决策只记录写作层选择。

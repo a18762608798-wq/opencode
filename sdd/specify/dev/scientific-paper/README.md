@@ -1,13 +1,13 @@
 # scientific-paper preset
 
-面向“数值结果 → 正式 LaTeX 论文”的 Spec Kit 模板包。核心主张：**论文的每个主张都绑定上游数据产物，缺件留空不编数，解释性正文问用户要推测并标记待验证**。
+面向“数值结果 → 正式 LaTeX 论文”的 Spec Kit 模板包。核心职责分工：**Exp 层掌握科学事实权威，`paper-map` 负责论文架构设计，Paper Spec 落实已确认架构并管理核心科学主张（`CLM-###`）的证据追溯，缺件留空不编数，解释性正文问用户要推测并标记待验证**。
 
-依赖上游 `scientific-computing` 产物：`specs/expXX`（实验定义）、`S##`（共享输出）、`D##`（数据集 + `figs/` 图）、`docs/paper-outline.md`（论文大纲）。
+依赖上游 `scientific-computing` 产物：`specs/expXX`（实验定义）、`S##`（共享输出）、`D##`（数据集 + `figs/` 图）、`docs/expriment-map.md`（产物权威表）、`docs/paper-outline.md`（内容清单）与 `docs/paper-map.md`（论文架构依据）。
 
 ## 文件
 
 - `preset.yml` — manifest，声明 id / provides / replaces
- - `templates/constitution-template.md` — 论文宪法：spec 权威、证据绑定、数字不编、缺件协议（GAP-DATA 留空 / GAP-INTERP 问用户要推测）、8 个 paper-* skills 分工
+- `templates/constitution-template.md` — 论文宪法：Exp 层科学事实权威、核心主张可追溯、数字不编、缺件协议（GAP-DATA 留空 / GAP-INTERP 问用户要推测）、8 个 paper-* skills 分工
 - `templates/spec-template.md` — 论文定义：主张 / 上游输入 / 章节 / 图位 / 引用需求 / 缺件；合同：SEC / FIG / CLM / GAP / CIT
 - `templates/plan-template.md` — 章节→skill 映射、LaTeX 工程结构、编译与评审计划
 - `templates/tasks-template.md` — 任务：按 Assemble → Write → Cite → Format → post-implement review 推进
