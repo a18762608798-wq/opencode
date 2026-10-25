@@ -1,30 +1,32 @@
 # Writing Plan: [FEATURE NAME]
 
+> 章节顺序与论证功能服从已确认的 `docs/paper-map.md`。
+> plan 只落实 map，不重做架构设计。
+
 ## 1. 写作思路
 
 整体准备怎么把 spec 写成论文。
 
 包括：
 
-- 章节顺序与依赖（先方法结果，后引言结论，还是按 venue 常规顺序）
-- 上游产物到章节的数据流（哪个 `D##` 进哪节、哪张图）
+- 章节顺序与依赖（以 paper-map 的 Section Architecture 为准，
+  不预设 Methods 必须先于 Results，按 map 的叙事主线走）
+- 上游产物到章节的数据流（哪个 `D##` 进哪节、哪张图，引用 `CLM/FIG` ID）
 - 缺件章节的先行 / 冻结安排（`GAP-DATA` 留空位先行，`GAP-INTERP` 等用户推测）
 
 需要关联 spec 中的约束时引用其 ID，不重复定义 Contract。
 
 ## 2. 章节与 Skill 映射
 
-说明每个 `SEC-###` 由哪个 skill 执笔：
-
-Methods 先说明可复现的方法机制，Results and Discussion 再消费结果
-数据产品并写具体趋势、排名和比较结论；支持性有限尺寸诊断可放入 Appendix。
+说明每个 `SEC-###` 由哪个 skill 执笔（分工以 map 为准，
+具体写法与格式交给对应 Skill）：
 
 例如：
 
-- `SEC-001`（Methods）：`paper-writing-section`（methods），输入 `D##` + 上游 `P##`
-- `SEC-002`（Results）：`paper-writing-section`（results），输入 `D##` + `figs/...`
-- Related Work 段落：`paper-writing-section`（Related Work 模式；PRA 并入 Introduction，不单列）
-- 图位：`paper-figure-layout`（`FIG-###` → 单栏 / `figure*` / 并排）
+- `SEC-001`（...）：`paper-writing-section`（...模式），输入 `D##` + 上游 `P##`
+- `SEC-002`（...）：`paper-writing-section`（...模式），输入 `D##` + `figs/...`
+- Related Work：`paper-writing-section`（Related Work 模式；对 PRA 论文通常并入 Introduction，是否单独设节服从已确认的 paper-map 与具体稿件需求）
+- 图位：`paper-figure-layout`（`FIG-###` 用途 → 具体单栏 / `figure*` / 并排由该 skill 定）
 - 引用：`paper-zotero-hunter`（`CIT-###` → harvest / verify / bind）
 - 格式：`paper-latex-formatting`（venue 模板 + `pra-notes.md` / `pra-figures.md`）
 - 打分 / 改文：`paper-self-review` / `paper-revision`

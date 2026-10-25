@@ -37,12 +37,12 @@ Apply both refinement passes from `references/refinement-prompts.md`:
 
 ## Output
 
-LaTeX fragment (no `\documentclass`, no preamble). All math enclosed in `$...$` or `\begin{equation}`, all figures referenced with `\ref{}`, all cited works use `\cite{}`, no placeholder text.
+LaTeX fragment (no `\documentclass`, no preamble). All math enclosed in `$...$` or `\begin{equation}`, all figures referenced with `\ref{}`, all cited works use `\cite{}`, no unconstrained placeholder text. Explicit gap markers passed from spec (`[TODO(GAP-###): ...]` / `[推测(user, ...)]`) may be preserved in working drafts; final drafts must contain no TODO/TBD/FIXME.
 
 ## Quality Checklist
 - All math enclosed properly
 - All `\ref{}` and `\cite{}` valid
-- No TODO/TBD/FIXME markers
+- No unresolved TODO/TBD/FIXME except explicit `GAP` markers in working drafts; final draft clean
 - Numbers match experimental logs exactly
 - Writing style is objective — no hype words
 - Section length appropriate for venue

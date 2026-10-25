@@ -1,37 +1,55 @@
 # Constitution
 
-## I. Spec 是论文定义的权威来源
+## I. 科学事实的权威来源是 Exp 层，不是 Paper Spec
 
-任何影响主张内容、证据指向或结论口径的事项，都必须由对应
-paper feature 的 spec 明确定义。
+上游 `scientific-computing`（`specs/expXX`、`S##`、`D##`、
+`docs/expriment-map.md`）拥有实验定义与结果含义的最终解释权。
 
-写作不得静默改变主张语义。
-主张或证据发生变化时，应先更新 spec。
+Paper Spec 只负责当前 feature 如何选取、组织和表述已有结果：
+写什么范围、按什么顺序、用什么证据、缺什么。不得擅自改变
+实验结果的含义或结论口径。
+
+模型可以提出新的物理解释或结论建议，但须经作者确认；
+一旦涉及科学结论、实验定义或结果含义变化，应暂停相关写作、
+回到上游核实，并更新受影响的规范，不得在 Paper 层静默转正。
 
 Spec 是持续维护的活文档，而不是一次性交付物。
 
-## II. 主张必须绑定证据
+## II. 核心主张必须可追溯，不逐句验收
 
-- 每个正文主张（`CLM-###`）必须指向具体上游产物：数据集（`D##`）、
-  图（`figs/` 文件）或共享输出（`S##`）。
-- 无证据的主张不得以陈述句写入正文，只能以缺件（`GAP-###`）或
-  标记的推测形式存在（见 IV）。
+- `CLM-###` 只追踪需要明确管理的核心科学主张，不是每个句子
+  都要绑定一个 `Dxx`。数值结果须可追溯到数据、图和分析产物
+ （`D##` / `figs/` / `S##`）；理论推导与背景论述可依据理论文档
+  和已核验文献（`paper-zotero-hunter` verify 标准）。
+- 无证据的核心主张不得以陈述句写入正文，只能以缺件（`GAP-###`）
+  或标记的推测形式存在（见 IV）。
 - 所有数字必须能在上游实验记录中溯源；禁止编造数字、p 值、
-  引用、图表。
+  引用、图表。重点是科学准确性与可追溯性。
 
 ## III. 上游、成文与实现分离
 
-- 上游 `scientific-computing`：实验定义与数值结果（`specs/expXX`、`S##`、`D##`）
-- 本 preset 的 `spec.md`：论文定义（主张什么、用什么证据、缺什么）
-- `plan.md`：章节→skill 映射与 LaTeX 工程方案
-- `tasks.md`：具体写作与评审工作
+- 上游 `scientific-computing`：科学定义、实验结果及其含义
+ （`specs/expXX`、`S##`、`D##`）。
+- 本 preset 的 `spec.md`：落实已确认的 `paper-map`，选择、组织和表述
+  上游已经确定的结果，规定当前 feature 的写作范围、引用需求、
+  缺件与验收条件；不得擅自新增、升级或改变科学结论。
+- `plan.md`：章节到 Skill 的映射与 LaTeX 工程方案。
+- `tasks.md`：具体写作、检查与评审工作。
 
 上游实验定义不应重复写入论文 spec，需要时引用其 ID。
 LaTeX 细节（宏包、编译命令）不应无必要进入 spec。
 
 ## IV. 缺件协议
 
-缺件分两类，处理方式不同：
+缺件分两类，处理方式不同。分三个阶段执行：
+
+- 工作稿阶段：允许保留明确的 `GAP-DATA` / `GAP-INTERP` 标记，
+  不得用模糊措辞掩盖缺件。
+- 局部写作阶段：缺件不阻止无关内容先行完成。
+- 终稿收敛阶段：所有缺件必须解决，或明确阻止终稿验收；
+  不得带着未解决的 TODO 占位符宣称完成。
+
+具体：
 
 - `GAP-DATA`（缺数 / 缺图）：正文对应位置留
   `[TODO(GAP-###): 待 D##]` 空位，与之相关的主张冻结，
@@ -55,21 +73,33 @@ LaTeX 细节（宏包、编译命令）不应无必要进入 spec。
 - 规范性约束应采用足以消除歧义、支持验证的最低必要形式化程度。
 - 不得用多个彼此独立的表述重复定义同一规范性约束。
 
+## VII. 变更处理（避免返工重走全流程）
+
+- 只调整章节顺序、段落安排或正文与附录组织方式：更新
+  `paper-map` 和必要的 `plan`，继续写作。
+- 涉及科学结论、实验定义或结果含义变化：暂停相关写作，
+  返回 Exp 层核实，并更新受影响的规范。
+- 涉及 feature 边界或验收要求变化：只更新受影响的 spec 和
+  tasks，不要求整篇从头重走。
+
 ## VIII. 论文展开规则
 
-以 `docs/paper-map.md`（由 `paper-map` skill 从 `paper-outline.md` 生成，
-`Dxx` 定义以 `docs/expriment-map.md` 为准）为论文切分依据；
-默认按终稿宏观章节创建 paper feature：`paper-01` 为 Methods，
-`paper-02` 为 Results and Discussion，`paper-03` 为 Closing（摘要、结论、
-统稿）。同一宏观章节下的多个大纲小节默认合并；`paper-04` Appendix
-仅在材料足够独立且正文 feature 全部收敛后特批创建。
-Methods 只说明模型、协议、算法、测量和误差缓解机制；具体排名、趋势、
-比较和实验结论归 Results and Discussion。支持性有限尺寸诊断（如 D02a/b/c）
-归 Appendix，不因其生成方法属于 Methods 就把结果结论混入 Methods。
-一次展开一个 feature，每个走一轮完整 specify 流程
-（specify → clarify → plan → tasks → analyze → implement → converge）；
-不得把同一宏观章节默认拆成多个 feature，不得因单个实验、图或 Dxx
-单独创建 paper feature；不得在 spec 之外另行定义主张与证据归属。
+以确认后的 `docs/paper-map.md`（由 `paper-map` skill 经架构访谈生成，
+`Dxx` 定义以 `docs/expriment-map.md` 为准）为论文切分依据。
+
+- 论文结构由 map 的 Narrative Spine / Section Architecture /
+  Result Roles 决定，Constitution 不预设固定三段式。
+  `paper-01 = Methods`、`paper-02 = Results and Discussion`、
+  `paper-03 = Closing` 只是可能的划分之一；附录定位在架构设计
+  阶段确定，具体实施可延后。
+- Venue 公认规范（如 PRA 章节习惯）由对应 Skills 负责；
+  无唯一标准答案的取舍由作者经架构访谈确认，记入 map 的
+  Confirmed Decisions / Open Issues。
+- 一次展开一个 feature，每个走一轮完整 specify 流程
+ （specify → clarify → plan → tasks → analyze → implement → converge）；
+  不得以单个实验、图或 Dxx 单独创建 paper feature；
+  不得在 spec 之外另行定义核心主张与证据归属。
+- Feature 是工作流组织单元，不必与最终论文章节一一对应。
 
 ## IX. 论文技术与风格约定
 

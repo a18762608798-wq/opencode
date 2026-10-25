@@ -16,11 +16,12 @@ description: 从论文主线创建或更新 paper feature specification。
 
 2. 以 `docs/paper-map.md` 为切片依据，检查 `specs/` 下已有 paper feature。
    - 如果需求属于现有 feature 的自然扩展，更新该 feature。
-   - 只有当需求对应 paper-map 中独立的终稿宏观章节或特批 Appendix 时才创建新的 feature；
-     同一宏观章节下的大纲小节默认合并，但 Methods 的机制说明与 Results and Discussion
-     的具体结论、以及独立的支持性 Appendix 可以按叙事边界分开。单个实验、图或 Dxx
-     不单独创建 feature。
-   - 大纲变更时先重跑 `paper-map` skill 更新 map，再开新 feature。
+   - 只有当需求对应 paper-map 中已确认的独立 feature（见 map 的
+     Feature Coverage & Decisions）时才创建新的 feature；
+     切分服从 map 的 Section Architecture / Result Roles，
+     不套用固定的 Methods / Results / Closing 三段式。
+     单个实验、图或 Dxx 不单独创建 feature。
+   - 大纲或结果变更时先重跑 `paper-map` skill 更新 map，再开新 feature。
    - 避免创建职责重叠的 feature。
 
 3. 确定 feature directory。
