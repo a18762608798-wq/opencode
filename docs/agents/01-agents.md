@@ -11,15 +11,13 @@ Agent 是 OpenCode 中最核心的概念。一个 Agent 定义了：
 
 ## 本仓库当前启用的 Agent（真实配置）
 
-全局配置 `~/.config/opencode`（本仓库）当前实际采用 **Manager 包工头小队（`manager` + `coder`/`env-ops`/`reviewer`）+ `speckit-guide`** 架构：
+全局配置 `~/.config/opencode`（本仓库）当前实际采用 **主会话直接处理 + 3 个异构子 Agent（`coder`/`env-ops`/`reviewer`）**：
 
 | Agent | `mode` | 职责 |
 | ----- | ------ | ---- |
-| `manager` | `primary`（包工头主控，按需切换） | 只拆单派发与 YES/FAIL 拍板，不读业务源码；调度 3 个异构子 Agent，复用 `sessionID` 续上下文 |
 | `coder` | `subagent` | 编码主力：仓库理解、架构实现、修 bug，自测后写回 `.opencode/handoff.md` |
 | `env-ops` | `subagent` | 环境与终端攻坚：依赖安装、编译排错、服务脚本，命令写入 `.opencode/handoff.md` |
 | `reviewer` | `subagent` | 只读预审：跑 `git diff` 与测试，输出 PASS/FAIL 预审单（≤6 行） |
-| `speckit-guide` | `all` | GitHub Spec Kit 流程引导 |
 
 > 下文 Build / Plan 等为 OpenCode 内置 Agent 的通用说明；本仓库已在 `opencode.jsonc` 中禁用 `general` / `explore`。下文自定义 Agent 的示例文件均为**通用语法教学示例**，不代表本仓库现存文件。
 
