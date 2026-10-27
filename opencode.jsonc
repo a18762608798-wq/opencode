@@ -301,7 +301,7 @@
             "zotero": {
                 "type": "local",
                 "command": [
-                    "/home/mintusr/.local/bin/zotero-mcp"
+                    "/home/dell/.local/bin/zotero-mcp"
                 ],
                 "disabled": false,
                 "timeout": {
