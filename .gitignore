@@ -33,3 +33,6 @@ service.json
 
 # Session files
 session-*.md
+
+# Skill generated and maintained by CCGUI
+skills/ccgui-plugin-creator/

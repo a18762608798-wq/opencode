@@ -11,7 +11,7 @@
 | `cli.json` / `service.json` | TUI 显示配置 / `serve` 服务配置 |
 | `skills/` | 已迁至 `~/.agents/skills`（与 Pi 双端共享，10 个），本仓不再保留 |
 | `agents/` | 3 个异构子 Agent（`coder`/`env-ops`/`reviewer`），由主会话按需直接调用 |
-| `plugins/` | 2 个本地插件：`speckit-rework-gate.ts`（Spec Kit 返工门禁，含 `scope` 硬约束与 `close`）、`formula-style.ts`（LaTeX `$` / `$$` 公式格式注入） |
+| `plugins/` | 全局仅保留 `formula-style.ts`（LaTeX `$` / `$$` 公式格式注入）；Spec Kit 返工插件已迁到 `~/.agents/sdd/specify/plugins/speckit-rework/opencode/`，初始化项目后按需安装到项目 `.opencode/plugins/` |
 | `sdd/` | 规范驱动开发文档：COC 理论、OpenSpec、GitHub Spec Kit 全套文档与 Presets（见下节） |
 | `docs/` | 本地手册，入口见 `docs/index.md` |
 | `docs/web/README.md` | 手机浏览器访问（`serve` / `pair` + Tailscale） |

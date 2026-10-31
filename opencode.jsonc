@@ -30,7 +30,7 @@
             "disabled": true
         }
     },
-    // vankit config
+    // Provider 配置
     "providers": {
         // opencode-go: 显式声明 variants，使 `#xhigh` 等 variant 合法并真正传参 reasoningEffort
         "opencode-go": {
@@ -42,134 +42,6 @@
                         { "id": "medium", "settings": { "reasoningEffort": "medium" } },
                         { "id": "high", "settings": { "reasoningEffort": "high" } },
                         { "id": "xhigh", "settings": { "reasoningEffort": "xhigh" } }
-                    ]
-                }
-            }
-        },
-        "vankit-0.06": {
-            "name": "Vankit-0.06",
-            "env": [
-                "VANKIT_0_06_API_KEY"
-            ],
-            "package": "@opencode/ai/providers/openai-compatible",
-            "settings": {
-                "baseURL": "https://sub.vankit.top/v1",
-                "apiKey": "{env:VANKIT_0_06_API_KEY}"
-            },
-            "body": {
-                "store": false
-            },
-            "models": {
-                "gpt-6.1-sol": {
-                    "modelID": "gpt-6.1-sol",
-                    "name": "GPT-6.1 Sol",
-                    "limit": {
-                        "context": 1050000,
-                        "output": 128000
-                    },
-                    "variants": [
-                        {
-                            "id": "xhigh"
-                        },
-                        {
-                            "id": "max"
-                        }
-                    ]
-                }
-            }
-        },
-        "vankit-0.15": {
-            "name": "Vankit-0.15",
-            "env": [
-                "VANKIT_0_15_API_KEY"
-            ],
-            "package": "@opencode/ai/providers/openai-compatible",
-            "settings": {
-                "baseURL": "https://sub.vankit.top/v1",
-                "apiKey": "{env:VANKIT_0_15_API_KEY}"
-            },
-            "body": {
-                "store": false
-            },
-            "models": {
-                "gpt-6.1-sol": {
-                    "modelID": "gpt-6.1-sol",
-                    "name": "GPT-6.1 Sol",
-                    "limit": {
-                        "context": 1050000,
-                        "output": 128000
-                    },
-                    "variants": [
-                        {
-                            "id": "xhigh"
-                        },
-                        {
-                            "id": "max"
-                        }
-                    ]
-                }
-            }
-        },
-        "vankit-0.25": {
-            "name": "Vankit-0.25",
-            "env": [
-                "VANKIT_0_25_API_KEY"
-            ],
-            "package": "@opencode/ai/providers/openai-compatible",
-            "settings": {
-                "baseURL": "https://sub.vankit.top/v1",
-                "apiKey": "{env:VANKIT_0_25_API_KEY}"
-            },
-            "body": {
-                "store": false
-            },
-            "models": {
-                "gpt-6.1-sol": {
-                    "modelID": "gpt-6.1-sol",
-                    "name": "GPT-6.1 Sol",
-                    "limit": {
-                        "context": 1050000,
-                        "output": 128000
-                    },
-                    "variants": [
-                        {
-                            "id": "xhigh"
-                        },
-                        {
-                            "id": "max"
-                        }
-                    ]
-                }
-            }
-        },
-        "vankit-0.55": {
-            "name": "Vankit-0.55",
-            "env": [
-                "VANKIT_0_55_API_KEY"
-            ],
-            "package": "@opencode/ai/providers/openai-compatible",
-            "settings": {
-                "baseURL": "https://sub.vankit.top/v1",
-                "apiKey": "{env:VANKIT_0_55_API_KEY}"
-            },
-            "body": {
-                "store": false
-            },
-            "models": {
-                "gpt-6.1-sol": {
-                    "modelID": "gpt-6.1-sol",
-                    "name": "GPT-6.1 Sol",
-                    "limit": {
-                        "context": 1050000,
-                        "output": 128000
-                    },
-                    "variants": [
-                        {
-                            "id": "xhigh"
-                        },
-                        {
-                            "id": "max"
-                        }
                     ]
                 }
             }
@@ -190,22 +62,7 @@
             },
             {
                 "action": "provider.use",
-                "resource": "vankit-0.06",
-                "effect": "allow"
-            },
-            {
-                "action": "provider.use",
-                "resource": "vankit-0.15",
-                "effect": "allow"
-            },
-            {
-                "action": "provider.use",
-                "resource": "vankit-0.25",
-                "effect": "allow"
-            },
-            {
-                "action": "provider.use",
-                "resource": "vankit-0.55",
+                "resource": "openai",
                 "effect": "allow"
             }
         ]
