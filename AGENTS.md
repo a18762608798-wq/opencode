@@ -20,6 +20,6 @@
 
 ## 技能调用
 
-* 需要找论文、补参考文献、给任务配文献时，使用 `zotero-paper-hunter` skill（websearch 发现候选，arXiv/出版商页核实元数据，全经 Zotero MCP 去重入库到主题 `paper/inbox`）。
-* 需要找书、教材、讲义入库时，使用 `zotero-book-hunter` skill（先查 ISBN 再入库）。
-* 只在库内检索已有文献时，用 Zotero 语义搜索，不走 hunter。
+* 需要找论文、补参考文献、给任务配文献并导入 Gamma 时，使用 `gamma-paper-hunter` skill。
+* 需要找书、教材、讲义并导入 Gamma 时，使用 `gamma-book-hunter` skill。
+* 只在 Gamma 库内检索已有文献时，使用 Gamma MCP，不走 hunter。
